@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>README Maker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>README Maker</h1>
+        <form id="readme-form">
+            <label for="project-title">Project Title:</label>
+            <input type="text" id="project-title" name="project-title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="installation">Installation Instructions:</label>
+            <textarea id="installation" name="installation"></textarea>
+
+            <label for="usage">Usage:</label>
+            <textarea id="usage" name="usage"></textarea>
+
+            <label for="contributing">Contributing:</label>
+            <textarea id="contributing" name="contributing"></textarea>
+
+            <label for="license">License:</label>
+            <input type="text" id="license" name="license">
+
+            <button type="button" onclick="generateReadme()">Generate README.md</button>
+        </form>
+        <pre id="output"></pre>
+        <button id="download-btn" style="display: none;" onclick="downloadReadme()">Download README.md</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
