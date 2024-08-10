@@ -1,115 +1,89 @@
-let sectionCounter = 0;
+document.addEventListener("DOMContentLoaded", () => {
+  // List of sections
+  const sections = [
+    "Custom Section",
+    "Acknowledgements",
+    "API Reference",
+    "Appendix",
+    "Authors",
+    "Badges",
+    "Color Reference",
+    "Contributing",
+    "Demo",
+    "Deployment",
+    "Documentation",
+    "Environment Variables",
+    "FAQ",
+    "Features",
+    "Feedback",
+    "Github Profile - About Me",
+    "Github Profile - Introduction",
+    "Github Profile - Links",
+    "Github Profile - Other",
+    "Github Profile - Skills",
+    "Installation",
+    "Lessons",
+    "License",
+    "Logo",
+    "Optimizations",
+    "Related",
+    "Roadmap",
+    "Run Locally",
+    "Screenshots",
+    "Support",
+    "Tech",
+    "Running Tests",
+    "Usage/Examples",
+    "Used By",
+  ];
 
-function addSection() {
-  sectionCounter++;
-  const sectionId = `section-${sectionCounter}`;
-  const sectionHtml = `
-        <div id="${sectionId}" class="section bg-gray-50 p-4 border border-gray-200 rounded-lg">
-            <label for="${sectionId}-title" class="block text-sm font-semibold">Section Title:</label>
-            <input type="text" id="${sectionId}-title" name="${sectionId}-title" required
-                class="w-full p-2 border border-gray-300 rounded-lg mb-2">
-            <label for="${sectionId}-content" class="block text-sm font-semibold">Content:</label>
-            <textarea id="${sectionId}-content" name="${sectionId}-content" required
-                class="w-full p-2 border border-gray-300 rounded-lg mb-2"></textarea>
-            <button type="button" onclick="removeSection('${sectionId}')"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
-                Remove Section
-            </button>
-        </div>
-    `;
-  document
-    .getElementById("sections-container")
-    .insertAdjacentHTML("beforeend", sectionHtml);
-  updateReadme();
-}
+  const sidebarButtons = document.getElementById("sidebar-buttons");
+  const searchInput = document.getElementById("search");
+  const editor = document.getElementById("editor");
+  const preview = document.getElementById("preview");
 
-function removeSection(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (section) section.remove();
-  updateReadme();
-}
-
-function addSectionToForm(sectionTitle) {
-  sectionCounter++;
-  const sectionId = `section-${sectionCounter}`;
-  const sectionHtml = `
-        <div id="${sectionId}" class="section bg-gray-50 p-4 border border-gray-200 rounded-lg">
-            <label for="${sectionId}-title" class="block text-sm font-semibold">Section Title:</label>
-            <input type="text" id="${sectionId}-title" name="${sectionId}-title" value="${sectionTitle}" required
-                class="w-full p-2 border border-gray-300 rounded-lg mb-2">
-            <label for="${sectionId}-content" class="block text-sm font-semibold">Content:</label>
-            <textarea id="${sectionId}-content" name="${sectionId}-content" required
-                class="w-full p-2 border border-gray-300 rounded-lg mb-2"></textarea>
-            <button type="button" onclick="removeSection('${sectionId}')"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
-                Remove Section
-            </button>
-        </div>
-    `;
-  document
-    .getElementById("sections-container")
-    .insertAdjacentHTML("beforeend", sectionHtml);
-  updateReadme();
-}
-
-function filterSections() {
-  const query = document.getElementById("section-search").value.toLowerCase();
-  const buttons = document.querySelectorAll("#sections button");
-  buttons.forEach((button) => {
-    if (button.textContent.toLowerCase().includes(query)) {
-      button.style.display = "block";
-    } else {
-      button.style.display = "none";
-    }
-  });
-}
-
-function downloadReadme() {
-  const readmeContent = generateReadme();
-  const blob = new Blob([readmeContent], { type: "text/markdown" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "README.md";
-  link.click();
-}
-
-function updateReadme() {
-  const readmeContent = generateReadme();
-  document.getElementById("output").textContent = readmeContent;
-
-  // Convert markdown to HTML for preview
-  const converter = new showdown.Converter();
-  const html = converter.makeHtml(readmeContent);
-  document.getElementById("preview").innerHTML = html;
-
-  // Show download button if README is not empty
-  document.getElementById("download-btn").style.display = readmeContent
-    ? "block"
-    : "none";
-}
-
-function generateReadme() {
-  const projectTitle = document.getElementById("project-title").value.trim();
-  const description = document.getElementById("description").value.trim();
-  let readmeContent = `# ${projectTitle}\n\n## Description\n${description}\n`;
-
-  const sections = document.querySelectorAll("#sections-container .section");
+  // Create buttons for each section
   sections.forEach((section) => {
-    const title = section.querySelector("input").value.trim();
-    const content = section.querySelector("textarea").value.trim();
-    if (title && content) {
-      readmeContent += `\n## ${title}\n${content}\n`;
-    }
+    const button = document.createElement("button");
+    button.textContent = section;
+    button.className =
+      "w-full p-2 text-left bg-gray-200 rounded-md dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600";
+    button.addEventListener("click", () => {
+      editor.value += `## ${section}\n\n`;
+      updatePreview();
+    });
+    sidebarButtons.appendChild(button);
   });
 
-  return readmeContent;
-}
-
-document.getElementById("readme-form").addEventListener("input", updateReadme);
-
-function showTab(tabName) {
-  document.querySelectorAll(".tabcontent").forEach((tab) => {
-    tab.style.display = "none";
+  // Filter sections based on search input
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const buttons = sidebarButtons.querySelectorAll("button");
+    buttons.forEach((button) => {
+      if (button.textContent.toLowerCase().includes(query)) {
+        button.style.display = "block";
+      } else {
+        button.style.display = "none";
+      }
+    });
   });
-  document.getElementById(tabName).style.display = "block";
-}
+
+  // Update preview based on editor content
+  function updatePreview() {
+    const markdownText = editor.value;
+    preview.innerHTML = marked.parse(markdownText);
+  }
+
+  editor.addEventListener("input", updatePreview);
+
+  // Handle download button click
+  document.getElementById("download-btn").addEventListener("click", () => {
+    const blob = new Blob([editor.value], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "README.md";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+});

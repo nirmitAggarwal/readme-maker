@@ -1,128 +1,56 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>README Maker</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto p-8 bg-white shadow-lg rounded-lg">
-        <h1 class="text-3xl font-bold text-center mb-8">README Maker</h1>
-        <form id="readme-form" class="space-y-6">
-            <div>
-                <label for="project-title" class="block text-lg font-semibold">Project Title:</label>
-                <input type="text" id="project-title" name="project-title" required
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+<body class="bg-gray-100 dark:bg-gray-900">
 
-            <div>
-                <label for="description" class="block text-lg font-semibold">Description:</label>
-                <textarea id="description" name="description" required
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-            </div>
-
-            <div id="sections-container" class="space-y-4">
-                <!-- Dynamically added sections will appear here -->
-            </div>
-
-            <button type="button" onclick="addSection()"
-                class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                Add Custom Section
-            </button>
-        </form>
-
-        <div id="section-list" class="mt-8">
-            <input type="text" id="section-search" placeholder="Search for a section..."
-                class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                oninput="filterSections()">
-            <div id="sections" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <!-- List of predefined sections -->
-                <button onclick="addSectionToForm('Acknowledgements')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Acknowledgements</button>
-                <button onclick="addSectionToForm('API Reference')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">API Reference</button>
-                <button onclick="addSectionToForm('Appendix')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Appendix</button>
-                <button onclick="addSectionToForm('Authors')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Authors</button>
-                <button onclick="addSectionToForm('Badges')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Badges</button>
-                <button onclick="addSectionToForm('Color Reference')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Color Reference</button>
-                <button onclick="addSectionToForm('Contributing')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Contributing</button>
-                <button onclick="addSectionToForm('Demo')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Demo</button>
-                <button onclick="addSectionToForm('Deployment')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Deployment</button>
-                <button onclick="addSectionToForm('Documentation')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Documentation</button>
-                <button onclick="addSectionToForm('Environment Variables')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Environment Variables</button>
-                <button onclick="addSectionToForm('FAQ')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">FAQ</button>
-                <button onclick="addSectionToForm('Features')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Features</button>
-                <button onclick="addSectionToForm('Feedback')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Feedback</button>
-                <button onclick="addSectionToForm('Github Profile - About Me')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Github Profile - About Me</button>
-                <button onclick="addSectionToForm('Github Profile - Introduction')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Github Profile - Introduction</button>
-                <button onclick="addSectionToForm('Github Profile - Links')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Github Profile - Links</button>
-                <button onclick="addSectionToForm('Github Profile - Other')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Github Profile - Other</button>
-                <button onclick="addSectionToForm('Github Profile - Skills')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Github Profile - Skills</button>
-                <button onclick="addSectionToForm('Installation')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Installation</button>
-                <button onclick="addSectionToForm('Lessons')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Lessons</button>
-                <button onclick="addSectionToForm('License')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">License</button>
-                <button onclick="addSectionToForm('Logo')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Logo</button>
-                <button onclick="addSectionToForm('Optimizations')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Optimizations</button>
-                <button onclick="addSectionToForm('Related')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Related</button>
-                <button onclick="addSectionToForm('Roadmap')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Roadmap</button>
-                <button onclick="addSectionToForm('Run Locally')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Run Locally</button>
-                <button onclick="addSectionToForm('Screenshots')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Screenshots</button>
-                <button onclick="addSectionToForm('Support')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Support</button>
-                <button onclick="addSectionToForm('Tech Stack')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Tech Stack</button>
-                <button onclick="addSectionToForm('Running Tests')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Running Tests</button>
-                <button onclick="addSectionToForm('Usage/Examples')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Usage/Examples</button>
-                <button onclick="addSectionToForm('Used By')"
-                    class="bg-gray-200 p-2 rounded-lg hover:bg-gray-300 transition-colors">Used By</button>
+    <!-- Navbar -->
+    <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://github.com/nirmitAggarwal" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="channels4_profile.jpg" class="h-9 rounded" alt="Logo">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">README Maker</span>
+            </a>
+            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                <button id="download-btn" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Download README</button>
             </div>
         </div>
+    </nav>
 
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold">Preview</h2>
-            <div class="tabs mt-4">
-                <button onclick="showTab('raw')" class="tablink bg-gray-300 p-2 rounded-lg mr-2">Raw Markdown</button>
-                <button onclick="showTab('preview')" class="tablink bg-gray-300 p-2 rounded-lg">Preview</button>
+    <!-- Main content -->
+    <div class="flex flex-col md:flex-row mt-16">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-1/4 bg-white dark:bg-gray-800 p-4 border-r border-gray-200 dark:border-gray-600">
+            <div class="mb-4">
+                <input type="text" id="search" placeholder="Search for a section" class="w-full p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-900 dark:text-white">
             </div>
-            <pre id="output" class="tabcontent mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg whitespace-pre-wrap"></pre>
-            <div id="preview" class="tabcontent mt-4 p-4 bg-gray-100 border border-gray-300 rounded-lg" style="display: none;"></div>
-        </div>
-
-        <button id="download-btn" style="display: none;"
-            class="w-full bg-green-500 text-white py-2 rounded-lg mt-6 hover:bg-green-600 transition-colors"
-            onclick="downloadReadme()">Download README.md</button>
+            <div id="sidebar-buttons" class="space-y-2">
+                <!-- Buttons will be added dynamically here -->
+            </div>
+        </aside>
+        
+        <!-- Main window -->
+        <main class="w-full md:w-3/4 p-4">
+            <div class="flex space-x-4">
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold mb-2">Markdown Editor</h2>
+                    <textarea id="editor" class="w-full h-full p-4 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-900 dark:text-white" placeholder="Start typing your markdown..."></textarea>
+                </div>
+                <div class="w-1/2">
+                    <h2 class="text-xl font-semibold mb-2">Preview</h2>
+                    <div id="preview" class="w-full h-full p-4 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-900 dark:text-white"></div>
+                </div>
+            </div>
+        </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
