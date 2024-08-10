@@ -1,41 +1,115 @@
-function generateReadme() {
-  const title = document.getElementById("project-title").value;
-  const description = document.getElementById("description").value;
-  const installation = document.getElementById("installation").value;
-  const usage = document.getElementById("usage").value;
-  const contributing = document.getElementById("contributing").value;
-  const license = document.getElementById("license").value;
+let sectionCounter = 0;
 
-  let readmeContent = `# ${title}\n\n## Description\n${description}\n\n`;
+function addSection() {
+  sectionCounter++;
+  const sectionId = `section-${sectionCounter}`;
+  const sectionHtml = `
+        <div id="${sectionId}" class="section bg-gray-50 p-4 border border-gray-200 rounded-lg">
+            <label for="${sectionId}-title" class="block text-sm font-semibold">Section Title:</label>
+            <input type="text" id="${sectionId}-title" name="${sectionId}-title" required
+                class="w-full p-2 border border-gray-300 rounded-lg mb-2">
+            <label for="${sectionId}-content" class="block text-sm font-semibold">Content:</label>
+            <textarea id="${sectionId}-content" name="${sectionId}-content" required
+                class="w-full p-2 border border-gray-300 rounded-lg mb-2"></textarea>
+            <button type="button" onclick="removeSection('${sectionId}')"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                Remove Section
+            </button>
+        </div>
+    `;
+  document
+    .getElementById("sections-container")
+    .insertAdjacentHTML("beforeend", sectionHtml);
+  updateReadme();
+}
 
-  if (installation) {
-    readmeContent += `## Installation\n${installation}\n\n`;
-  }
+function removeSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) section.remove();
+  updateReadme();
+}
 
-  if (usage) {
-    readmeContent += `## Usage\n${usage}\n\n`;
-  }
+function addSectionToForm(sectionTitle) {
+  sectionCounter++;
+  const sectionId = `section-${sectionCounter}`;
+  const sectionHtml = `
+        <div id="${sectionId}" class="section bg-gray-50 p-4 border border-gray-200 rounded-lg">
+            <label for="${sectionId}-title" class="block text-sm font-semibold">Section Title:</label>
+            <input type="text" id="${sectionId}-title" name="${sectionId}-title" value="${sectionTitle}" required
+                class="w-full p-2 border border-gray-300 rounded-lg mb-2">
+            <label for="${sectionId}-content" class="block text-sm font-semibold">Content:</label>
+            <textarea id="${sectionId}-content" name="${sectionId}-content" required
+                class="w-full p-2 border border-gray-300 rounded-lg mb-2"></textarea>
+            <button type="button" onclick="removeSection('${sectionId}')"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                Remove Section
+            </button>
+        </div>
+    `;
+  document
+    .getElementById("sections-container")
+    .insertAdjacentHTML("beforeend", sectionHtml);
+  updateReadme();
+}
 
-  if (contributing) {
-    readmeContent += `## Contributing\n${contributing}\n\n`;
-  }
-
-  if (license) {
-    readmeContent += `## License\n${license}\n\n`;
-  }
-
-  document.getElementById("output").textContent = readmeContent;
-  document.getElementById("download-btn").style.display = "block";
+function filterSections() {
+  const query = document.getElementById("section-search").value.toLowerCase();
+  const buttons = document.querySelectorAll("#sections button");
+  buttons.forEach((button) => {
+    if (button.textContent.toLowerCase().includes(query)) {
+      button.style.display = "block";
+    } else {
+      button.style.display = "none";
+    }
+  });
 }
 
 function downloadReadme() {
-  const content = document.getElementById("output").textContent;
-  const blob = new Blob([content], { type: "text/markdown" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "README.md";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const readmeContent = generateReadme();
+  const blob = new Blob([readmeContent], { type: "text/markdown" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "README.md";
+  link.click();
+}
+
+function updateReadme() {
+  const readmeContent = generateReadme();
+  document.getElementById("output").textContent = readmeContent;
+
+  // Convert markdown to HTML for preview
+  const converter = new showdown.Converter();
+  const html = converter.makeHtml(readmeContent);
+  document.getElementById("preview").innerHTML = html;
+
+  // Show download button if README is not empty
+  document.getElementById("download-btn").style.display = readmeContent
+    ? "block"
+    : "none";
+}
+
+function generateReadme() {
+  const projectTitle = document.getElementById("project-title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  let readmeContent = `# ${projectTitle}\n\n## Description\n${description}\n`;
+
+  const sections = document.querySelectorAll("#sections-container .section");
+  sections.forEach((section) => {
+    const title = section.querySelector("input").value.trim();
+    const content = section.querySelector("textarea").value.trim();
+    if (title && content) {
+      readmeContent += `\n## ${title}\n${content}\n`;
+    }
+  });
+
+  return readmeContent;
+}
+
+document.getElementById("readme-form").addEventListener("input", updateReadme);
+
+function showTab(tabName) {
+  document.querySelectorAll(".tabcontent").forEach((tab) => {
+    tab.style.display = "none";
+  });
+  document.getElementById(tabName).style.display = "block";
 }

@@ -61,3 +61,37 @@ pre {
     overflow-x: auto;
     color: #98c379;
 }
+
+#section-list {
+    margin-top: 20px;
+}
+
+#section-search {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #3a3f4b;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #abb2bf;
+}
+
+#sections {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#sections button {
+    padding: 5px 10px;
+    background-color: #98c379;
+    border: none;
+    border-radius: 4px;
+    color: #282c34;
+    cursor: pointer;
+}
+
+#sections button:hover {
+    background-color: #7b9d63;
+}
